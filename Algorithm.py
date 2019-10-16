@@ -7,7 +7,7 @@ coins = {0.01: 0,  0.02: 0, 0.05: 0, 0.1: 0, 0.2: 0, 0.5: 0, 1: 0, 2: 0}
 
 kernel = np.ones((5, 5), np.uint8)
 #80,135,225
-lower = np.array([50, 80, 130])
+lower = np.array([0, 80, 100])
 higher = np.array([255, 255, 255])
 image = None
 
@@ -26,7 +26,7 @@ for i in range(9):
     kernel = np.ones((3, 3), np.uint8)
     opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
     #for creating less whitespaces
-    erosion = cv2.erode(opening, kernel, iterations=4)
+    erosion = cv2.erode(opening, kernel, iterations=6)
 
     # sure background area
     dilate = cv2.dilate(erosion, kernel, iterations=1)
@@ -73,37 +73,37 @@ for i in range(9):
         tmp.sort()
         contourData[i].append(key.size)
 
-cv2.imshow("test", files[5])
+cv2.imshow("test", files[8])
 #
-for i in files:
-    cv2.imshow(str(i), files[i])
+# for i in files:
+#     cv2.imshow(str(i), files[i])
 
 
 def amount(array):
     total = 0
     for data in array:
-        if data > 168:
+        if data > 165:
             print ("2")
             total += 2
-        elif data > 164:
+        elif data > 160:
             print ("0.5")
             total += 0.5
-        elif data > 155:
+        elif data > 152:
             print ("1")
             total += 1
-        elif data > 150:
+        elif data > 145:
             print ("0.2")
             total += 0.2
-        elif data > 142:
+        elif data > 138:
             print ("0.05")
             total += 0.05
-        elif data > 132:
+        elif data > 127:
             print ("0.1")
             total += 0.1
-        elif data > 125:
+        elif data > 122:
             print ("0.02")
             total += 0.02
-        elif data > 108:
+        elif data > 100:
             print ("0.01")
             total += 0.01
 
