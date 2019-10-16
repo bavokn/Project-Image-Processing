@@ -21,24 +21,26 @@ for i in range(9):
     greyscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     #set the treshold so that only coins are fully visible
     ret, thresh = cv2.threshold(greyscale, 95, 255, cv2.THRESH_BINARY)
+
     # noise removal
     kernel = np.ones((3, 3), np.uint8)
     opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
-    # sure background area
-    dilate = cv2.dilate(opening, kernel, iterations=3)
-
-    #blur the image so that there a less whitespaces
-    blur = cv2.blur(thresh, (4, 4))
-
     #for creating less whitespaces
-    erosion = cv2.erode(blur, kernel, iterations=5)
+    erosion = cv2.erode(opening, kernel, iterations=4)
+
+    # sure background area
+    dilate = cv2.dilate(erosion, kernel, iterations=1)
+
+    blur = cv2.blur(dilate, (3, 3))
+
+
     #find the contours on the coints
-    contours, hierarchy = cv2.findContours(erosion, cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
+    contours, hierarchy = cv2.findContours(dilate, cv2.RETR_TREE, cv2.CHAIN_APPROX_TC89_L1)
 
     #loop over the coints and check if the contours are larger than 5000, if so draw an ellipse over the coin
     for c in contours:
         area = cv2.contourArea(c)
-        if area > 5000 :
+        if area > 5000:
             ellipse = cv2.fitEllipse(c)
             files[i] = cv2.ellipse(image, ellipse, (0, 255, 0), 2)
             files[i] = cv2.drawContours(image, c, -1, (255, 0, 0), 3)
@@ -46,14 +48,14 @@ for i in range(9):
 
 cv2.imshow("test", files[5])
 #
-# for i in files:
-#     cv2.imshow(str(i), files[i])
+for i in files:
+    cv2.imshow(str(i), files[i])
 
 
 def amount(array):
     total = 0
     for data in array:
-        if data > 21000:
+        if data > 21500:
             print ("2")
             total += 2
         elif data > 20000:
@@ -74,7 +76,7 @@ def amount(array):
         elif data > 12000:
             print ("0.02")
             total += 0.02
-        elif data > 8500:
+        elif data > 6800:
             print ("0.01")
             total += 0.01
 
