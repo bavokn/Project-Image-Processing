@@ -8,7 +8,7 @@ coins = {0.01: 0, 0.02: 0, 0.05: 0, 0.1: 0, 0.2: 0, 0.5: 0, 1: 0, 2: 0}
 
 kernel = np.ones((5, 5), np.uint8)
 # 80,135,225
-lower = np.array([0, 80, 100])
+lower = np.array([0, 0, 100])
 higher = np.array([255, 255, 255])
 image = None
 
@@ -44,22 +44,22 @@ def amount(array):
         if data > 165:
             print ("2")
             total += 2
-        elif data > 160:
+        elif data > 156:
             print ("0.5")
             total += 0.5
-        elif data > 152:
+        elif data > 149:
             print ("1")
             total += 1
-        elif data > 145:
+        elif data > 140:
             print ("0.2")
             total += 0.2
-        elif data > 138:
+        elif data > 134:
             print ("0.05")
             total += 0.05
-        elif data > 127:
+        elif data > 124:
             print ("0.1")
             total += 0.1
-        elif data > 122:
+        elif data > 120:
             print ("0.02")
             total += 0.02
         elif data > 100:
@@ -78,13 +78,13 @@ for i in range(9):
     # grey scale the image
     greyscale = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     # set the treshold so that only coins are fully visible
-    ret, thresh = cv2.threshold(greyscale, 90, 255, cv2.THRESH_BINARY)
+    ret, thresh = cv2.threshold(greyscale, 85, 255, cv2.THRESH_BINARY)
 
     # noise removal
     kernel = np.ones((3, 3), np.uint8)
-    opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=2)
+    opening = cv2.morphologyEx(thresh, cv2.MORPH_OPEN, kernel, iterations=3)
     # for creating less whitespaces
-    erosion = cv2.erode(opening, kernel, iterations=6)
+    erosion = cv2.erode(opening, kernel, iterations=7)
 
     # sure background area
     dilate = cv2.dilate(erosion, kernel, iterations=1)
@@ -119,7 +119,6 @@ for i in range(9):
 
     files[i] = cv2.drawKeypoints(orgImage, keypoints, blank, (0, 0, 255),
                                  cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
-
 i = 0
 for file in files:
     cv2.imshow("image : " + str(i), files[file])
