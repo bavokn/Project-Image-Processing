@@ -1,6 +1,4 @@
 # coding=utf-8
-import time
-
 import cv2
 import numpy as np
 
@@ -19,33 +17,53 @@ fontScale = 20
 fontColor = (255, 255, 255)
 lineType = 20
 
+# Set our filtering parameters
+# Initialize parameter setting using cv2.SimpleBlobDetector
+params = cv2.SimpleBlobDetector_Params()
+
+# Set Area filtering parameters
+params.filterByArea = True
+params.minArea = 5000
+params.maxArea = 300000
+
+# Set Circularity filtering parameters
+params.filterByCircularity = True
+params.minCircularity = 0.8
+
+# Set Convexity filtering parameters
+params.filterByConvexity = True
+params.minConvexity = 0.2
+
+# Set inertia filtering parameters
+params.filterByInertia = True
+params.minInertiaRatio = 0.01
 
 def amount(array):
     total = 0
     for data in array:
         if data > 165:
-            # print ("2")
+            print ("2")
             total += 2
         elif data > 160:
-            # print ("0.5")
+            print ("0.5")
             total += 0.5
         elif data > 152:
-            # print ("1")
+            print ("1")
             total += 1
         elif data > 145:
-            # print ("0.2")
+            print ("0.2")
             total += 0.2
         elif data > 138:
-            # print ("0.05")
+            print ("0.05")
             total += 0.05
         elif data > 127:
-            # print ("0.1")
+            print ("0.1")
             total += 0.1
         elif data > 122:
-            # print ("0.02")
+            print ("0.02")
             total += 0.02
         elif data > 100:
-            # print ("0.01")
+            print ("0.01")
             total += 0.01
 
     return total
@@ -72,27 +90,6 @@ for i in range(9):
     dilate = cv2.dilate(erosion, kernel, iterations=1)
 
     blur = cv2.blur(dilate, (3, 3))
-
-    # Set our filtering parameters
-    # Initialize parameter setting using cv2.SimpleBlobDetector
-    params = cv2.SimpleBlobDetector_Params()
-
-    # Set Area filtering parameters
-    params.filterByArea = True
-    params.minArea = 5000
-    params.maxArea = 300000
-
-    # Set Circularity filtering parameters
-    params.filterByCircularity = True
-    params.minCircularity = 0.8
-
-    # Set Convexity filtering parameters
-    params.filterByConvexity = True
-    params.minConvexity = 0.2
-
-    # Set inertia filtering parameters
-    params.filterByInertia = True
-    params.minInertiaRatio = 0.01
 
     # Create a detector with the parameters
     detector = cv2.SimpleBlobDetector_create(params)
@@ -125,7 +122,7 @@ for i in range(9):
 
 i = 0
 for file in files:
-    cv2.imshow(str(i), files[file])
+    cv2.imshow("image : " + str(i), files[file])
     i += 1
 
 cv2.waitKey()
