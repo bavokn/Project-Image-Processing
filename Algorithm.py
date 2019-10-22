@@ -1,4 +1,6 @@
 # coding=utf-8
+import time
+
 import cv2
 import numpy as np
 
@@ -12,40 +14,42 @@ lower = np.array([0, 80, 100])
 higher = np.array([255, 255, 255])
 image = None
 
-font                   = cv2.FONT_HERSHEY_SIMPLEX
-fontScale              = 20
-fontColor              = (255, 255, 255)
-lineType               = 20
+font = cv2.FONT_HERSHEY_SIMPLEX
+fontScale = 20
+fontColor = (255, 255, 255)
+lineType = 20
+
 
 def amount(array):
     total = 0
     for data in array:
         if data > 165:
-            print ("2")
+            # print ("2")
             total += 2
         elif data > 160:
-            print ("0.5")
+            # print ("0.5")
             total += 0.5
         elif data > 152:
-            print ("1")
+            # print ("1")
             total += 1
         elif data > 145:
-            print ("0.2")
+            # print ("0.2")
             total += 0.2
         elif data > 138:
-            print ("0.05")
+            # print ("0.05")
             total += 0.05
         elif data > 127:
-            print ("0.1")
+            # print ("0.1")
             total += 0.1
         elif data > 122:
-            print ("0.02")
+            # print ("0.02")
             total += 0.02
         elif data > 100:
-            print ("0.01")
+            # print ("0.01")
             total += 0.01
 
     return total
+
 
 for i in range(9):
     # create mask for the image , filtering out most of the blue
@@ -97,11 +101,9 @@ for i in range(9):
     invert = cv2.bitwise_not(blur)
     # Detect blobs
     keypoints = detector.detect(invert)
-    print len(keypoints)
+
     # Draw blobs on our image as red circles
     blank = np.zeros((1, 1))
-
-
 
     tmp = []
     for key in keypoints:
@@ -114,6 +116,10 @@ for i in range(9):
         files[i] = cv2.putText(orgImage, str(val), bottomLeftCornerOfText, cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255),
                                lineType=cv2.LINE_AA)
         tmp = []
+
+    files[i] = cv2.putText(orgImage, str(amount(contourData.values()[i])), (10, 20), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
+                           (0, 0, 255), lineType=cv2.LINE_AA)
+
     files[i] = cv2.drawKeypoints(orgImage, keypoints, blank, (0, 0, 255),
                                  cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS)
 
@@ -121,11 +127,5 @@ i = 0
 for file in files:
     cv2.imshow(str(i), files[file])
     i += 1
-
-for data in contourData:
-    contourData[data].sort()
-    print contourData[data]
-    print amount(contourData[data])
-    print ("----------------------------")
 
 cv2.waitKey()
