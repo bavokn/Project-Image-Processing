@@ -17,6 +17,27 @@ fontScale              = 20
 fontColor              = (255, 255, 255)
 lineType               = 20
 
+# Set our filtering parameters
+# Initialize parameter setting using cv2.SimpleBlobDetector
+params = cv2.SimpleBlobDetector_Params()
+
+# Set Area filtering parameters
+params.filterByArea = True
+params.minArea = 5000
+params.maxArea = 300000
+
+# Set Circularity filtering parameters
+params.filterByCircularity = True
+params.minCircularity = 0.8
+
+# Set Convexity filtering parameters
+params.filterByConvexity = True
+params.minConvexity = 0.2
+
+# Set inertia filtering parameters
+params.filterByInertia = True
+params.minInertiaRatio = 0.01
+
 def amount(array):
     total = 0
     for data in array:
@@ -69,27 +90,6 @@ for i in range(9):
 
     blur = cv2.blur(dilate, (3, 3))
 
-    # Set our filtering parameters
-    # Initialize parameter setting using cv2.SimpleBlobDetector
-    params = cv2.SimpleBlobDetector_Params()
-
-    # Set Area filtering parameters
-    params.filterByArea = True
-    params.minArea = 5000
-    params.maxArea = 300000
-
-    # Set Circularity filtering parameters
-    params.filterByCircularity = True
-    params.minCircularity = 0.8
-
-    # Set Convexity filtering parameters
-    params.filterByConvexity = True
-    params.minConvexity = 0.2
-
-    # Set inertia filtering parameters
-    params.filterByInertia = True
-    params.minInertiaRatio = 0.01
-
     # Create a detector with the parameters
     detector = cv2.SimpleBlobDetector_create(params)
 
@@ -97,11 +97,8 @@ for i in range(9):
     invert = cv2.bitwise_not(blur)
     # Detect blobs
     keypoints = detector.detect(invert)
-    print len(keypoints)
     # Draw blobs on our image as red circles
     blank = np.zeros((1, 1))
-
-
 
     tmp = []
     for key in keypoints:
@@ -119,7 +116,7 @@ for i in range(9):
 
 i = 0
 for file in files:
-    cv2.imshow(str(i), files[file])
+    cv2.imshow("image : " + str(i), files[file])
     i += 1
 
 for data in contourData:
